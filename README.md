@@ -70,6 +70,10 @@ python -m app.main
 
 Server runs at: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+Swagger for api testing [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+Swagger Documentation [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
 ---
 
 ## 📁 Project Structure
