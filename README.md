@@ -41,8 +41,8 @@ This is a backend system built with **FastAPI** and **MongoDB** for managing use
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/admin-dashboard-api.git
-cd admin-dashboard-api
+git clone https://github.com/Ankansa/admin_dashboard.git
+cd admin_dashboard
 
 # Setup virtual environment
 python -m venv venv
