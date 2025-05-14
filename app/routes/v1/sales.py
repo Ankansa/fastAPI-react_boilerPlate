@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from ...utils.permissions import permission_dependency
-from app.db.mongo import sells_collection
+# from app.db.mongo import sells_collection
+from app.db.models.sells import SellsCollection
 from typing import Optional, Dict, Any, List, AnyStr
 
 
@@ -17,7 +18,7 @@ async def get_sales(pages: int, count: int, _: dict = Depends(permission_depende
 
     skip = (pages - 1) * count
 
-    cursor = sells_collection.aggregate([
+    cursor = SellsCollection.aggregate([
         {"$project": {"_id": 0}},
         {"$skip": skip},
         {"$limit": count}
