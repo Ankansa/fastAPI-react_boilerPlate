@@ -1,4 +1,4 @@
-# 🛠️ Admin Dashboard API
+# 🛠️ fastAPI-react_boilerPlate
 
 This is a backend system built with **FastAPI** and **MongoDB** for managing users, custom fields, and permissions in an admin-controlled environment.
 
@@ -41,8 +41,8 @@ This is a backend system built with **FastAPI** and **MongoDB** for managing use
 
 ```bash
 # Clone the repo
-git clone https://github.com/Ankansa/admin_dashboard.git
-cd admin_dashboard
+git clone https://github.com/Ankansa/fastAPI-react_boilerPlate.git
+cd fastAPI-react_boilerPlate
 
 # Setup virtual environment
 python -m venv venv
@@ -79,7 +79,7 @@ Swagger Documentation [http://localhost:8000/redoc](http://localhost:8000/redoc)
 ## 📁 Project Structure
 
 ```
-admin_dashboard/
+fastAPI-react_boilerPlate/
 ├── app/
 │   ├── routes/                # API endpoints (auth, users, permissions, sales)
 │   ├── schemas/               # Pydantic models for request/response
