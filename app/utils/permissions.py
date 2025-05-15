@@ -9,6 +9,10 @@ async def require_permission(permission: str, user: dict = Depends(get_current_u
     if user.get("role") == "admin":
         return user  # Admin bypass
     user_perm = await PermissionsCollection.find_one({"user_id": user["sub"]})
+    if user_perm:
+        user_perm = user_perm.model_dump()
+    else:
+        user_perm = {}
     if not user_perm or not user_perm.get("permissions", {}).get(permission, False):
         raise HTTPException(status_code=403, detail=f"Permission '{permission}' required")
     return user

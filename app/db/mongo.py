@@ -12,10 +12,11 @@ import importlib
 import pkgutil
 import app.db.models
 load_dotenv()
-
-MONGO_URI = os.getenv("MONGO_URI")
+import os
+MONGO_URI = os.getenv("MONGO_URI").encode().decode('unicode_escape')
 DB_NAME = os.getenv("DB_NAME")
 
+print(MONGO_URI)
 def get_all_document_models():
     document_models = []
     for _, module_name, _ in pkgutil.iter_modules(app.db.models.__path__):

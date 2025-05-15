@@ -15,26 +15,25 @@ router = APIRouter()
 
 @router.post("/permissions")
 async def update_permissions(data: PermissionUpdate, _: dict = Depends(permission_dependency("update_permissions"))):
-    existing = await PermissionsCollection.find_one({"user_id": data.user_id})
+    existing = await PermissionsCollection.find_one(PermissionsCollection.user_id == data.user_id)
 
-    # Safely get existing permissions, or use empty dict if not found
-    current_permissions = existing.get("permissions", {}) if existing else {}
+    current_permissions = existing.permissions if existing else {}
     merged_permissions = {**current_permissions, **data.permissions}
 
-    await PermissionsCollection.find_one_and_update(
-        {"user_id": data.user_id},
-        {"$set": {"permissions": merged_permissions}},
-        upsert=True  # optionally True, in case you want to create if not exist
-    )
+    if existing:
+        existing.permissions = merged_permissions
+        await existing.save()
+    else:
+        new_perm = PermissionsCollection(user_id=data.user_id, permissions=merged_permissions)
+        await new_perm.insert()
 
     return {"status": "Permissions updated"}
 
 @router.get("/permissions/{user_id}")
 async def get_permissions(user_id: str, _: dict = Depends(permission_dependency("view_permissions"))):
-    print(user_id)
     perms = await PermissionsCollection.find_one({"user_id": user_id})
+    
     if not perms:
         raise HTTPException(status_code=404, detail="No permissions found")
-    return perms.get("permissions", {})
-
-
+    
+    return perms.permissions  # assuming permissions is a Dict field in your model

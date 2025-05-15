@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from app.schemas.user_schema import UserCreate, UserOut
 # from app.db.mongo import user_collection
-from app.db.models.users import UserCollection
+from app.db.models.users import UsersCollection
 from app.utils.auth import hash_password
 from app.utils.dependencies import admin_required
 from bson import ObjectId
@@ -36,24 +36,25 @@ async def create_user(user: UserCreate, current_user: dict = Depends(permission_
     user_data["created_at"] = user_data["updated_at"] = datetime.utcnow().isoformat()
     user_data["is_active"] = True
     user_data["custom_fields"] = user_data.get("custom_fields", {})
-    result = await UserCollection.insert_one(user_data)
-    return {**user_data, "id": str(result.inserted_id)}
+    user = UserCollection(**user_data)
+    result = await user.insert()
+    return {**user_data, "id": str(result.id)}
 
 @router.get("/users")
 async def list_users(_: dict = Depends(permission_dependency("view_users"))):
-    users = await UserCollection.find().to_list(length=100)
+    users = await UserCollection.find_all().to_list()
     return [
         {
-            "id": str(user["_id"]),
-            "name": user["name"],
-            "email": user["email"],
-            "role": user["role"],
-            "custom_fields": user.get("custom_fields", {}),
-            "added_by": user.get("added_by","Self"),
-            "organization_name": user.get("organization_name"),
-            "organization_country": user.get("organization_country"),
-            "created_at": user.get("created_at"),
-            "updated_at": user.get("updated_at"),
+            "id": str(user.id),
+            "name": user.name,
+            "email": user.email,
+            "role": user.role,
+            "custom_fields": user.custom_fields,
+            "added_by": getattr(user, "added_by", "Self"),
+            "organization_name": user.organization_name,
+            "organization_country": user.organization_country,
+            "created_at": user.created_at,
+            "updated_at": user.updated_at,
         }
         for user in users
     ]

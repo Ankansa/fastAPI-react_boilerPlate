@@ -1,19 +1,14 @@
+from typing import Dict
 from beanie import Document
-from pydantic import Field, BaseModel
-from datetime import datetime
-from typing import Optional
+from pydantic import BaseModel, Field
+from bson import ObjectId
 
 class PermissionsCollection(Document):
-    user_id: str = Field(..., description="Reference to the user ID")
-    create_user: bool
-    view_users: bool
-    view_sales: bool
-    permissions: Optional[dict] = {}
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    user_id: str  # or ObjectId if you're using ObjectId
+    permissions: Dict[str, bool] = Field(default_factory=dict)
 
     class Settings:
-        name = "permissions"  # Name of the MongoDB collection
+        name = "permissions"  # your MongoDB collection name
         indexes = [
-            "user_id",  # Index on the user_id field
+            [("user_id", 1)],  # Create an index on user_id
         ]
