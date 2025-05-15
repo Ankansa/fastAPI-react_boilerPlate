@@ -14,7 +14,7 @@ async def register(user: UserRegister):
             raise HTTPException(status_code=400, detail="Email already registered.")
 
         # Prepare user data
-        
+
         user_data = {
             "name": user.name,
             "email": user.email,
@@ -25,6 +25,7 @@ async def register(user: UserRegister):
             "created_at": user.created_at,
             "updated_at": user.updated_at,
         }
+        
 
         # Create and insert the user
         new_user = UsersCollection(**user_data)
