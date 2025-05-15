@@ -14,6 +14,7 @@ async def register(user: UserRegister):
             raise HTTPException(status_code=400, detail="Email already registered.")
 
         # Prepare user data
+        
         user_data = {
             "name": user.name,
             "email": user.email,
